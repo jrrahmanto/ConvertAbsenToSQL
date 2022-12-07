@@ -20,12 +20,13 @@ namespace WorkerGetDataAbsen
             public int isdelete { get; set; }
         }
 
-        public class MKaryawan
+        public class MEmployee
         {
             [Key]
-            public int id { get; set; }
-            public string NIP { get; set; }
+            public long id { get; set; }
+            public int nip { get; set; }
             public int isdelete { get; set; }
+            public string emp_aktif { get; set; }
         }
         public class TAbsensi
         {
@@ -39,12 +40,22 @@ namespace WorkerGetDataAbsen
             public Decimal Nominal_Lembur { get; set; }
             public bool? Hitung_Lembur { get; set; }
             public DateTime update_date { get; set; }
-            public string keterangan { get; set; }
+            public string? keterangan { get; set; }
         }
         public class dataMesin
         {
             public int id_mechine { get; set; }
             public DateTime date { get; set; }
+        }
+        public class TAbsenKhusus
+        {
+            [Key]
+            public int id { get; set; }
+            public int nip { get; set; }
+            public DateTime periode_start { get; set; }
+            public DateTime periode_end { get; set; }
+            public string keterangan { get; set; }
+            public int isdelete { get; set; }
         }
     }
 }

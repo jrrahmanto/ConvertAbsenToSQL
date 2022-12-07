@@ -30,7 +30,8 @@ namespace WorkerGetDataAbsen
         }
 
         public DbSet<MMesinAbsen> MMesinAbsen { get; set; }
-        public DbSet<MKaryawan> MKaryawan { get; set; }
+        public DbSet<MEmployee> MEmployee { get; set; }
         public DbSet<TAbsensi> TAbsensi { get; set; }
+        public DbSet<TAbsenKhusus> TAbsenKhusus { get; set; }
     }
 }
