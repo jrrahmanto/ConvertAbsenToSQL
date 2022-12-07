@@ -97,8 +97,8 @@ namespace WorkerGetDataAbsen
                     {
                         var datamesinIN = new List<dataMesin>();
                         var datamesinOUT = new List<dataMesin>();
-                        using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=C:\\Program Files (x86)\\Att\\att2000.mdb;"))
-                        //using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=D:\\att2000.mdb;"))
+                        //using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=C:\\Program Files (x86)\\Att\\att2000.mdb;"))
+                        using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=D:\\att2000.mdb;"))
 
                         {
                             conection.Open();
@@ -145,9 +145,9 @@ namespace WorkerGetDataAbsen
 
                         foreach (var item in resultIN)
                         {
-                            var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id, p.NIP, p.update_date }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
+                            var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id,p.keterangan, p.NIP, p.update_date, p.Jam_Masuk }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
                             
-                            if (checkDataAbsen.Count != 0)
+                            if (checkDataAbsen.Count != 0 && checkDataAbsen[0].Jam_Masuk == null)
                             {
                                 Console.WriteLine(item.date+" - "+item.NIP);
                                 TimeSpan start = new TimeSpan(08, 1, 0);
@@ -160,6 +160,7 @@ namespace WorkerGetDataAbsen
                                 absen.Lembur = null;
                                 absen.Nominal_Lembur = 0;
                                 absen.Hitung_Lembur = false;
+                                absen.keterangan = checkDataAbsen[0].keterangan;
                                 if ((item.date.TimeOfDay > start))
                                 {
                                     absen.Status = "terlambat";
@@ -177,9 +178,10 @@ namespace WorkerGetDataAbsen
                         var context = new Data();
                         foreach (var item in resultOUT)
                         {
-                            var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id, p.NIP, p.update_date, p.Jam_Masuk }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
-                            if (checkDataAbsen.Count != 0)
+                            var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id,p.keterangan,p.Jam_Keluar, p.NIP, p.update_date, p.Jam_Masuk }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
+                            if (checkDataAbsen.Count != 0 && checkDataAbsen[0].Jam_Keluar == null)
                             {
+                                Console.WriteLine(item.date + " - " + item.NIP);
                                 TimeSpan lembur = (item.date - Convert.ToDateTime(DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 17:00:00")));
                                 if (lembur.TotalHours < 1)
                                 {
@@ -195,6 +197,7 @@ namespace WorkerGetDataAbsen
                                 absen.Nominal_Lembur = 0;
                                 absen.Hitung_Lembur = false;
                                 absen.Status = "masuk";
+                                absen.keterangan = checkDataAbsen[0].keterangan;
                                 context.TAbsensi.Update(absen);
                                 context.SaveChanges();
                             }
