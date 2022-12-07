@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.OleDb;
 using System.Security.Cryptography;
+using static System.Net.Mime.MediaTypeNames;
 using static WorkerGetDataAbsen.Model;
 
 namespace WorkerGetDataAbsen
@@ -126,15 +127,15 @@ namespace WorkerGetDataAbsen
                                     });
                                 }
                         }
-                        var result_datamesinIN = datamesinIN.GroupBy(test => test.id_mechine)
+                        var result_datamesinIN = datamesinIN.GroupBy(test => new { test.id_mechine, test.date.Date })
                                                .Select(grp => grp.First())
                                                .ToList();
 
                         var resultIN = (from a in result_datamesinIN
                                         join b in master_absen on a.id_mechine equals b.id_mechine
-                                        select new { b.NIP, a.date }).ToList();
+                        select new { b.NIP, a.date }).ToList();
 
-                        var result_datamesinOUT = datamesinOUT.GroupBy(test => test.id_mechine)
+                        var result_datamesinOUT = datamesinOUT.GroupBy(test => new { test.id_mechine, test.date.Date })
                                                .Select(grp => grp.First())
                                                .ToList();
 
@@ -145,9 +146,10 @@ namespace WorkerGetDataAbsen
                         foreach (var item in resultIN)
                         {
                             var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id, p.NIP, p.update_date }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
-
+                            
                             if (checkDataAbsen.Count != 0)
                             {
+                                Console.WriteLine(item.date+" - "+item.NIP);
                                 TimeSpan start = new TimeSpan(08, 1, 0);
 
                                 var absen = new TAbsensi();
@@ -204,7 +206,7 @@ namespace WorkerGetDataAbsen
 
                     throw;
                 }
-                await Task.Delay(600000, stoppingToken);
+                await Task.Delay(1800000, stoppingToken);
             }
         }
     }
