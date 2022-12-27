@@ -57,5 +57,13 @@ namespace WorkerGetDataAbsen
             public string keterangan { get; set; }
             public int isdelete { get; set; }
         }
+        public class MHariLibur
+        {
+            [Key]
+            public int id { get; set; }
+            public DateTime tanggal { get; set; }
+            public string keterangan { get; set; }
+            public int isdelete { get; set; }
+        }
     }
 }

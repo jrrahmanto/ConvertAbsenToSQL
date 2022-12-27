@@ -25,13 +25,18 @@ namespace WorkerGetDataAbsen
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _ = optionsBuilder.UseSqlServer(_connectionString, providerOptions => providerOptions.CommandTimeout(60000))
-                          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            _ = optionsBuilder.UseSqlServer(_connectionString, providerOptions =>
+            {
+                providerOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                providerOptions.CommandTimeout(60000);
+            })
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
 
         public DbSet<MMesinAbsen> MMesinAbsen { get; set; }
         public DbSet<MEmployee> MEmployee { get; set; }
         public DbSet<TAbsensi> TAbsensi { get; set; }
         public DbSet<TAbsenKhusus> TAbsenKhusus { get; set; }
+        public DbSet<MHariLibur> MHariLibur { get; set; }
     }
 }
