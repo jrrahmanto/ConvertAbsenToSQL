@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Source Code Service\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj": {}
+    "D:\\Source Code\\Micoservices Code\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj": {}
   },
   "projects": {
-    "D:\\Source Code Service\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj": {
+    "D:\\Source Code\\Micoservices Code\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Source Code Service\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj",
+        "projectUniqueName": "D:\\Source Code\\Micoservices Code\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj",
         "projectName": "WorkerGetDataAbsen",
-        "projectPath": "D:\\Source Code Service\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj",
+        "projectPath": "D:\\Source Code\\Micoservices Code\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\WorkerGetDataAbsen.csproj",
         "packagesPath": "C:\\Users\\IFA DTI\\.nuget\\packages\\",
-        "outputPath": "D:\\Source Code Service\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\obj\\",
+        "outputPath": "D:\\Source Code\\Micoservices Code\\WorkerGetDataAbsen\\WorkerGetDataAbsen\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -82,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

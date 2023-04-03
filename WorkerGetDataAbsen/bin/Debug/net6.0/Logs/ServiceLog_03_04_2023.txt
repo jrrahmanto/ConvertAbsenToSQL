@@ -1,0 +1,20 @@
+Start - 03/04/2023 11:56:22
+Start ke 1 - 03/04/2023 11:56:23
+Proses start 03/04/2023 11:56:23
+Proses ke 1 start 03/04/2023 11:56:27
+Start - 03/04/2023 11:57:30
+Start ke 1 - 03/04/2023 11:57:31
+Proses start 03/04/2023 11:57:31
+Proses ke 1 start 03/04/2023 11:57:34
+Start - 03/04/2023 12:00:23
+Start ke 1 - 03/04/2023 12:00:23
+Proses start 03/04/2023 12:00:23
+Proses ke 1 start 03/04/2023 12:00:28
+Start - 03/04/2023 12:01:04
+Start ke 1 - 03/04/2023 12:01:04
+Proses start 03/04/2023 12:01:04
+Proses ke 1 start 03/04/2023 12:01:09
+Start - 03/04/2023 12:02:00
+Start ke 1 - 03/04/2023 12:02:00
+Proses start 03/04/2023 12:02:00
+Proses ke 1 start 03/04/2023 12:02:05

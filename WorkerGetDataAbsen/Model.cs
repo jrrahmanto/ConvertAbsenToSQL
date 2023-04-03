@@ -56,6 +56,7 @@ namespace WorkerGetDataAbsen
             public DateTime periode_end { get; set; }
             public string keterangan { get; set; }
             public int isdelete { get; set; }
+            public int status { get; set; }
         }
         public class MHariLibur
         {

@@ -21,8 +21,10 @@ namespace WorkerGetDataAbsen
             WriteToFile("Start - " + DateTime.Now);
             while (!stoppingToken.IsCancellationRequested)
             {
+                WriteToFile("Start ke 1 - " + DateTime.Now);
                 try
                 {
+                    WriteToFile("Proses start " + DateTime.Now);
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
                     var dbcontext = new Data();
@@ -30,91 +32,15 @@ namespace WorkerGetDataAbsen
                                         select p).Where(x => x.isdelete == 0).ToList();
                     var master_karyawan = (from p in dbcontext.MEmployee
                                            select p).Where(x => x.isdelete == 0 && x.emp_aktif == "t").ToList();
-                    //var jam = DateTime.Now.Hour;
-                    //if (jam == 11)
-                    //{
-                    //    foreach (var item in master_karyawan)
-                    //    {
-                    //        var data_absen = (from p in dbcontext.TAbsensi
-                    //                          select p).Where(x => x.NIP == item.nip.ToString() && x.update_date == DateTime.Now.Date).FirstOrDefault();
-                    //        if (data_absen == null)
-                    //        {
-                    //            WriteToFile("Insert data pegawai start - " + DateTime.Now);
-                    //            var checkAbsenKhusus = (from a in dbcontext.TAbsenKhusus where a.nip == item.nip && (a.periode_start <= DateTime.Now.Date && DateTime.Now.Date <= a.periode_end) && a.isdelete == 0 select a).ToList();
-                    //            var checkAbsenKhususAll = (from a in dbcontext.TAbsenKhusus where a.nip == 999 && (a.periode_start <= DateTime.Now.Date && DateTime.Now.Date <= a.periode_end) && a.isdelete == 0 select a).ToList();
-                    //            var checkHariLibur = (from a in dbcontext.MHariLibur where a.tanggal == DateTime.Now.Date && a.isdelete == 0 select a).FirstOrDefault();
+                    WriteToFile("Proses ke 1 start " + DateTime.Now);
 
-                    //            //kalo ada yg absen khusus
-                    //            if (checkAbsenKhusus.Count != 0 || checkAbsenKhususAll.Count != 0)
-                    //            {
-                    //                var absen = new TAbsensi();
-                    //                absen.NIP = item.nip.ToString();
-                    //                absen.update_date =DateTime.Now.Date;
-                    //                absen.Jam_Masuk = null;
-                    //                absen.Jam_Keluar = null;
-                    //                absen.Lembur = null;
-                    //                absen.Nominal_Lembur = 0;
-                    //                absen.Hitung_Lembur = false;
-                    //                if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday || DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-                    //                {
-                    //                    absen.Status = DateTime.Now.DayOfWeek.ToString();
-                    //                }
-                    //                else
-                    //                {
-                    //                    absen.Status = "masuk";
-                    //                }
-                    //                if (checkAbsenKhusus.Count != 0)
-                    //                {
-                    //                    absen.keterangan = checkAbsenKhusus[0].keterangan;
-                    //                }
-                    //                else
-                    //                {
-                    //                    absen.keterangan = checkAbsenKhususAll[0].keterangan;
-                    //                }
-                    //                dbcontext.Add(absen);
-                    //                dbcontext.SaveChanges();
-
-                    //            }
-                    //            else
-                    //            {
-                    //                var absen = new TAbsensi();
-                    //                absen.NIP = item.nip.ToString();
-                    //                absen.update_date =DateTime.Now.Date;
-                    //                absen.Jam_Masuk = null;
-                    //                absen.Jam_Keluar = null;
-                    //                absen.Lembur = null;
-                    //                absen.Nominal_Lembur = 0;
-                    //                absen.Hitung_Lembur = false;
-                    //                if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday || DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-                    //                {
-                    //                    absen.Status = "Libur";
-                    //                }
-                    //                else if (checkHariLibur != null)
-                    //                {
-                    //                    absen.Status = "Libur";
-                    //                }
-                    //                else
-                    //                {
-                    //                    absen.Status = "tidak masuk";
-                    //                }
-
-                    //                dbcontext.Add(absen);
-                    //                dbcontext.SaveChanges();
-                    //            }
-                    //            WriteToFile("Insert data pegawai finish - " + DateTime.Now);
-                    //        }
-                    //    }
-                    //}
-                    //else if (jam > 8 && jam < 13)
-                    //{
                     var datamesinIN = new List<dataMesin>();
                     var datamesinOUT = new List<dataMesin>();
                     using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=C:\\Program Files (x86)\\Att\\att2000.mdb;"))
                     //using (var conection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;" + "data source=D:\\att2000.mdb;"))
-
                     {
                         conection.Open();
-                        var query = "Select TOP 200 CHECKTIME, USERID From CHECKINOUT ORDER BY CHECKTIME DESC";
+                        var query = "Select CHECKTIME, USERID From CHECKINOUT WHERE CHECKTIME > Date() - 7  ORDER BY CHECKTIME DESC";
                         var command = new OleDbCommand(query, conection);
                         var reader = command.ExecuteReader();
                         while (reader.Read())
@@ -141,6 +67,7 @@ namespace WorkerGetDataAbsen
                         conection.Close();
                     }
 
+                    WriteToFile("Proses ke 1 selesai " + DateTime.Now);
                     var result_datamesinIN = datamesinIN.GroupBy(test => new { test.id_mechine, test.date.Date })
                                            .Select(grp => grp.First())
                                            .ToList();
@@ -156,10 +83,11 @@ namespace WorkerGetDataAbsen
                     var resultOUT = (from a in result_datamesinOUT
                                      join b in master_absen on a.id_mechine equals b.id_mechine
                                      select new { b.NIP, a.date }).ToList();
+                    WriteToFile("Proses ke 2 mulai");
 
                     foreach (var item in resultIN)
                     {
-                        var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id, p.keterangan, p.NIP, p.update_date, p.Jam_Masuk }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
+                        var checkDataAbsen = (from p in dbcontext.TAbsensi select new { p.id, p.keterangan, p.NIP, p.update_date, p.Jam_Masuk, p.Status }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
                         var checkAbsenKhusus = (from a in dbcontext.TAbsenKhusus where a.nip == Convert.ToInt32(item.NIP) && (a.periode_start <= DateTime.Now.Date && DateTime.Now.Date <= a.periode_end) && a.isdelete == 0 select a).ToList();
 
                         if (checkDataAbsen.Count != 0 && checkDataAbsen[0].Jam_Masuk == null)
@@ -175,17 +103,14 @@ namespace WorkerGetDataAbsen
                             absen.Nominal_Lembur = 0;
                             absen.Hitung_Lembur = false;
                             absen.keterangan = checkDataAbsen[0].keterangan;
+                            absen.Status = checkDataAbsen[0].Status;
                             if (item.date.Date.DayOfWeek == DayOfWeek.Sunday || item.date.Date.DayOfWeek == DayOfWeek.Saturday)
                             {
                                 absen.Status = "masuk";
                             }
                             else
                             {
-                                if (checkAbsenKhusus.Count != 0)
-                                {
-                                    absen.Status = "masuk";
-                                }
-                                else if ((item.date.TimeOfDay > start) && checkAbsenKhusus.Count == 0)
+                                if ((item.date.TimeOfDay > start) && checkAbsenKhusus.Count == 0)
                                 {
                                     absen.Status = "terlambat";
                                 }
@@ -199,15 +124,21 @@ namespace WorkerGetDataAbsen
 
                         }
                     }
+
                     var context = new Data();
+                    WriteToFile("Proses ke 3 mulai");
                     foreach (var item in resultOUT)
                     {
                         var checkAbsenKhusus = (from a in context.TAbsenKhusus where a.nip == Convert.ToInt32(item.NIP) && (a.periode_start <= item.date.Date && item.date.Date <= a.periode_end) && a.isdelete == 0 select a).ToList();
                         var checkDataAbsen = (from p in context.TAbsensi select new { p.id, p.keterangan, p.Jam_Keluar, p.NIP, p.update_date, p.Jam_Masuk, p.Status }).Where(x => x.NIP == item.NIP && item.date.Date == x.update_date.Date).ToList();
+
+                        WriteToFile("total result out " + checkDataAbsen.Count+"++++"+ checkDataAbsen[0].Jam_Keluar);
+
                         if (checkDataAbsen.Count != 0 && checkDataAbsen[0].Jam_Keluar == null)
                         {
                             Console.WriteLine(item.date + " - " + item.NIP);
                             TimeSpan lembur = (item.date - Convert.ToDateTime(item.date.ToString("yyyy-MM-dd 17:00:00")));
+
                             if (lembur.TotalHours < 1)
                             {
                                 lembur = TimeSpan.Parse("00:00:00");
@@ -230,6 +161,10 @@ namespace WorkerGetDataAbsen
                             }
                             else
                             {
+                                if (checkDataAbsen[0].Status != "terlambat")
+                                {
+                                    absen.Status = "masuk";
+                                }
                                 absen.Lembur = lembur;
                                 absen.Status = checkDataAbsen[0].Status;
                             }
@@ -238,7 +173,8 @@ namespace WorkerGetDataAbsen
                             context.SaveChanges();
                         }
                     }
-                    //}
+                    WriteToFile("Proses selesai " + DateTime.Now);
+
                     await Task.Delay(300000, stoppingToken);
 
                 }
